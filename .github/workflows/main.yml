@@ -12,26 +12,15 @@ jobs:
       SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
       SERVER_PORT: ${{ secrets.SERVER_PORT }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-    
+      SERVER_IP: ${{ secrets.SERVER_IP }}
+      
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-      
-    - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.5.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-    - name: Run SSH command on remote server
-      run: ssh -o StrictHostKeyChecking=no -p ${{ secrets.SERVER_PORT }} -i ${{ secrets.SSH_PRIVATE_KEY_PATH }} ${{ secrets.SERVER_USERNAME }}@REMOTE_SERVER_IP 'sudo apt update'
-
-    - name: Set up Docker
+    
+    - name: Deploy with docker-compose
       run: |
-        sudo apt-get update
-        sudo apt-get -y install docker.io
+        docker-compose up -d
 
-    - name: Build Docker image
-      run: docker build -t your-docker-repo/your-app:latest .
-
-    - name: Run Docker container
-      run: docker run -d your-docker-repo/your-app:latest
+   
