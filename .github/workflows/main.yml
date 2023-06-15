@@ -12,14 +12,14 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-    
-    - name: Deploy
-      run: |
+      
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.0
+      with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-        server-ip: ${{ secrets.SERVER_IP }}
-        server-port: ${{ secrets.SERVER_PORT }}
-        remote-username: ${{ secrets.REMOTE_USERNAME }}
-        docker-compose up -d
+
+    - name: Run SSH command on remote server
+      run: ssh -o StrictHostKeyChecking=no -p ${{ secrets.SERVER_PORT }} -i ${{ secrets.SSH_PRIVATE_KEY_PATH }} ${{ secrets.SERVER_USERNAME }}@REMOTE_SERVER_IP 'sudo apt update'
 
     - name: Set up Docker
       run: |
