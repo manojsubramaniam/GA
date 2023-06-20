@@ -1,10 +1,8 @@
 name: Run Node.js Docker Image
-
 on:
   push:
     branches:
       - main
-
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -13,12 +11,9 @@ jobs:
       SERVER_PORT: ${{ secrets.SERVER_PORT }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       SERVER_IP: ${{ secrets.SERVER_IP }}
-      
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-    
     - name: Deploy with docker-compose
       run: |
         docker-compose up -d
